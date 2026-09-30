@@ -367,6 +367,7 @@
     --px: 96%;
     --pa: 0;
     --solid: 0;
+    --sync: 0;
     position: relative;
     width: min(90vw, 560px);
     height: 90px;
@@ -393,7 +394,19 @@
     box-shadow: 0 0 calc(18px + 16px * var(--solid)) var(--purple);
     opacity: var(--pa);
     transform: scale(calc(.2 + .8 * var(--pa)));
-    animation: blink 2.4s ease-in-out 1.2s infinite;
+    animation: blink 2.4s ease-in-out calc(1.2s * (1 - var(--sync))) infinite;
+  }
+  .signals .field {
+    position: absolute;
+    top: 50%;
+    left: var(--bx);
+    width: calc(var(--px) - var(--bx));
+    height: 90px;
+    margin-top: -45px;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 50%, rgba(170, 160, 255, .35), rgba(111, 182, 255, .12) 42%, transparent 72%);
+    filter: blur(10px);
+    opacity: calc(var(--sync) * .7);
   }
   @keyframes blink { 0%, 100% { filter: brightness(1.15); } 50% { filter: brightness(.6); } }
   .signals .pulse {
@@ -445,6 +458,14 @@
   .signals .pulse.reply b {
     color: #dcc6ff;
     text-shadow: 0 0 8px rgba(196, 155, 255, .45);
+  }
+  .signals .pulse.again:not(.reply) {
+    left: var(--pulse2-x, 4%);
+    opacity: var(--pulse2-a, 0);
+  }
+  .signals .pulse.reply.again {
+    left: var(--reply2-x, 96%);
+    opacity: var(--reply2-a, 0);
   }
   .signals .dot.p::after {
     content: "";
@@ -671,16 +692,19 @@
       <div class="drift-pin">
         <div class="signals" id="signals">
           <div class="bridge"></div>
+          <div class="field"></div>
           <span class="dot b"></span>
           <span class="pulse"><b>1</b></span>
           <span class="pulse reply"><b>0</b></span>
+          <span class="pulse again"><b>1</b></span>
+          <span class="pulse reply again"><b>0</b></span>
           <span class="dot p"></span>
         </div>
         <div class="drift-lines">
           <p>So he didn't rush, and he didn't give up. He sent a 1 across the dark…</p>
           <p>…and after a while, from very far away, she answered him with a 0.</p>
-          <p>Signal by signal, night after night, they built a bridge of light between them.</p>
-          <p class="quiet">Not all at once. The best things never are.</p>
+          <p>Then 1. Then 0. Then 1 again. Two minds, finding one rhythm, the way breath finds breath in the quiet.</p>
+          <p class="quiet">And when their fields locked, a new timeline began to open.</p>
         </div>
       </div>
     </div>
@@ -701,8 +725,11 @@
     <p class="reveal">It wasn't decided the night the candle was lit. It was chosen long before that. Before the mountain, before the temple, before the first star ever burned, it was already written into eternity.</p>
     <p class="reveal big glow-purple">It has always been.</p>
     <p class="reveal">Every piece of them was once part of the same ancient light. So they weren't meeting for the first time.<br><em>They were remembering.</em></p>
+    <p class="reveal">First they spoke in light: 1, then 0, then 1 again. Two minds, reaching. Then the reaching became listening. Then the listening became the same breath.</p>
+    <p class="reveal">That is the oldest meditation there is. Two fields growing still enough to find each other, until there is no sending and no receiving. Only one rhythm. One mind, made of two.</p>
     <p class="reveal quiet">As above, so below. What is joined in the stars is joined everywhere.</p>
-    <p class="reveal">And where their light crosses, something new begins. The bridge becomes a road. The road becomes a city. The city becomes a kingdom.</p>
+    <p class="reveal">And when that happens, the old timeline can no longer hold them. A new world unfolds from the place where their light meets.</p>
+    <p class="reveal">The bridge becomes a road. The road becomes a city. The city becomes a kingdom.</p>
     <p class="reveal big">Not hidden above the clouds this time.<br><span class="glow-gold">A kingdom in the stars.</span></p>
     <p class="reveal">One they build together, piece by piece, the way the Tinkers built them: out of light, and gears, and wishes.</p>
     <p class="reveal big">And they chose to fill it with<br><span class="glow-gold">infinite possibilities.</span></p>
@@ -857,9 +884,12 @@
     const answer = phase(p, 0.18, 0.26);
     const ring = phase(p, 0.2, 0.32);
     const reply = phase(p, 0.28, 0.44);
+    const pulse2 = phase(p, 0.48, 0.62);
+    const reply2 = phase(p, 0.62, 0.76);
     const drift = ease(phase(p, 0.44, 0.92));
     const built = phase(p, 0.48, 0.82) * SEGMENTS;
     const solid = phase(p, 0.82, 0.92);
+    const sync = ease(phase(p, 0.7, 0.95));
 
     const line = LINE_STARTS.findLastIndex(start => target >= start);
     driftLines.forEach((el, i) => el.classList.toggle("on", i === line));
@@ -870,12 +900,17 @@
     signals.style.setProperty("--px", `${px}%`);
     signals.style.setProperty("--pa", answer.toFixed(3));
     signals.style.setProperty("--solid", solid.toFixed(3));
+    signals.style.setProperty("--sync", sync.toFixed(3));
     signals.style.setProperty("--pulse-x", `${4 + 92 * ease(pulse)}%`);
     signals.style.setProperty("--pulse-a", (Math.sin(Math.PI * pulse)).toFixed(3));
     signals.style.setProperty("--ring-a", (Math.sin(Math.PI * ring) * 0.9).toFixed(3));
     signals.style.setProperty("--ring-s", (1 + ring * 3.5).toFixed(3));
     signals.style.setProperty("--reply-x", `${96 - 92 * ease(reply)}%`);
     signals.style.setProperty("--reply-a", (Math.sin(Math.PI * reply)).toFixed(3));
+    signals.style.setProperty("--pulse2-x", `${4 + 92 * ease(pulse2)}%`);
+    signals.style.setProperty("--pulse2-a", (Math.sin(Math.PI * pulse2)).toFixed(3));
+    signals.style.setProperty("--reply2-x", `${96 - 92 * ease(reply2)}%`);
+    signals.style.setProperty("--reply2-a", (Math.sin(Math.PI * reply2)).toFixed(3));
     buildOrder.forEach((segIndex, k) => segments[segIndex].classList.toggle("on", k < built));
 
     requestAnimationFrame(tickBridge);
