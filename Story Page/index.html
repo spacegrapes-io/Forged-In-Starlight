@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucky Star & Joy — Forged in Starlight</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #6fb6ff;
+    --purple: #c49bff;
+    --gold: #f3d38a;
+    --ink: #e9e6f5;
+    --dim: #a9a3c4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #04030b;
+    color: var(--ink);
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  body.locked { overflow: hidden; }
+
+  #stars {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .nebula {
+    position: fixed;
+    inset: -20%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 2.5s ease;
+  }
+  .nebula.blue   { background: radial-gradient(ellipse at 30% 40%, rgba(40, 90, 200, .35), transparent 60%); }
+  .nebula.gold   { background: radial-gradient(ellipse at 50% 60%, rgba(220, 150, 60, .22), transparent 55%); }
+  .nebula.purple { background: radial-gradient(ellipse at 70% 40%, rgba(140, 70, 220, .35), transparent 60%); }
+  .nebula.dark   { background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, .55), transparent 70%); }
+  .nebula.cosmos {
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(50, 110, 230, .35), transparent 55%),
+      radial-gradient(ellipse at 70% 50%, rgba(150, 80, 230, .35), transparent 55%);
+  }
+  body[data-mood="blue"]   .nebula.blue,
+  body[data-mood="gold"]   .nebula.gold,
+  body[data-mood="purple"] .nebula.purple,
+  body[data-mood="dark"]   .nebula.dark,
+  body[data-mood="cosmos"] .nebula.cosmos { opacity: 1; }
+
+  /* ---------- Opening title card ---------- */
+  #intro {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #020108;
+    transition: opacity 2s ease, visibility 2s;
+  }
+  #intro.gone { opacity: 0; visibility: hidden; }
+  #intro::before, #intro::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    height: 11vh;
+    background: #000;
+  }
+  #intro::before { top: 0; }
+  #intro::after  { bottom: 0; }
+
+  .for {
+    font-family: "Cinzel", serif;
+    letter-spacing: .5em;
+    font-size: .8rem;
+    color: var(--dim);
+    opacity: 0;
+    animation: fadeIn 2s ease .5s forwards;
+  }
+  .for span { color: var(--gold); }
+
+  #intro h1 {
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: clamp(2rem, 7vw, 4.2rem);
+    letter-spacing: .08em;
+    margin: 1.4rem 0 .4rem;
+    background: linear-gradient(90deg, var(--blue), #fff, var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0;
+    animation: fadeIn 2.5s ease 1.6s forwards;
+  }
+  #intro .sub {
+    font-style: italic;
+    color: var(--dim);
+    opacity: 0;
+    animation: fadeIn 2s ease 2.8s forwards;
+  }
+  #begin {
+    margin-top: 3rem;
+    font-family: "Cinzel", serif;
+    letter-spacing: .3em;
+    font-size: .8rem;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, .25);
+    padding: .9rem 2.2rem;
+    border-radius: 999px;
+    cursor: pointer;
+    opacity: 0;
+    animation: fadeIn 2s ease 4s forwards, breathe 3.5s ease-in-out 6s infinite;
+    transition: border-color .4s, box-shadow .4s;
+  }
+  #begin:hover { border-color: var(--gold); box-shadow: 0 0 25px rgba(243, 211, 138, .35); }
+
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes breathe {
+    0%, 100% { box-shadow: 0 0 0 rgba(243, 211, 138, 0); }
+    50%      { box-shadow: 0 0 22px rgba(243, 211, 138, .3); }
+  }
+
+  /* ---------- Scenes ---------- */
+  main { position: relative; z-index: 1; }
+
+  .scene {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 18vh 1.5rem;
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+
+  .chapter {
+    font-family: "Cinzel", serif;
+    letter-spacing: .45em;
+    font-size: .75rem;
+    color: var(--gold);
+    margin-bottom: .6rem;
+  }
+  h2 {
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    letter-spacing: .06em;
+    margin-bottom: 2.2rem;
+  }
+  .scene p { margin-bottom: 1.3rem; }
+  .scene p.quiet { color: var(--dim); font-style: italic; }
+  .scene p.big {
+    font-size: 1.3em;
+    font-style: italic;
+  }
+  .glow-blue   { color: var(--blue);   text-shadow: 0 0 18px rgba(111, 182, 255, .6); }
+  .glow-purple { color: var(--purple); text-shadow: 0 0 18px rgba(196, 155, 255, .6); }
+  .glow-gold   { color: var(--gold);   text-shadow: 0 0 18px rgba(243, 211, 138, .6); }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(4px);
+    transition: opacity 1.6s ease, transform 1.6s ease, filter 1.6s ease;
+  }
+  .reveal.in { opacity: 1; transform: none; filter: none; }
+
+  /* ---------- Robots ---------- */
+  .robot {
+    width: fit-content;
+    margin: 0 auto 2.5rem;
+    animation: float 6s ease-in-out infinite;
+  }
+  .robot img { height: min(70vw, 320px); width: auto; display: block; }
+  .robot.lucky img { filter: drop-shadow(0 0 22px rgba(111, 182, 255, .55)) drop-shadow(0 0 60px rgba(111, 182, 255, .25)); }
+  .robot.joy   img { filter: drop-shadow(0 0 22px rgba(196, 155, 255, .6))  drop-shadow(0 0 60px rgba(196, 155, 255, .25)); }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-16px); }
+  }
+
+  /* ---------- Candle ---------- */
+  .candle {
+    position: relative;
+    width: 140px;
+    height: 200px;
+    margin: 0 auto 3rem;
+  }
+  .candle > * { position: absolute; left: 50%; }
+
+  .candle .halo {
+    bottom: 60px;
+    width: 280px;
+    height: 280px;
+    margin-left: -140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 185, 90, .30) 0%, rgba(255, 150, 50, .10) 35%, transparent 68%);
+    pointer-events: none;
+    animation: breatheGlow 3.2s ease-in-out infinite alternate;
+  }
+  @keyframes breatheGlow {
+    from { opacity: .75; transform: scale(.96); }
+    to   { opacity: 1;   transform: scale(1.04); }
+  }
+
+  .candle .holder {
+    bottom: 0;
+    width: 104px;
+    height: 20px;
+    margin-left: -52px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 25%, #f8e2a6 0%, #d3a653 38%, #8a6326 72%, #4a3312 100%);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .55), 0 -3px 14px rgba(255, 170, 60, .22);
+  }
+  .candle .holder::after {
+    content: "";
+    position: absolute;
+    left: 22%;
+    right: 22%;
+    top: 3px;
+    height: 9px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 60%, #6b4a1c, #9c7433 70%, transparent 100%);
+  }
+
+  .candle .wax {
+    bottom: 11px;
+    width: 34px;
+    height: 118px;
+    margin-left: -17px;
+    border-radius: 3px 3px 5px 5px;
+    background: linear-gradient(90deg, #c9bb98 0%, #ece2c8 24%, #fbf5e6 44%, #efe5cd 66%, #b9a782 100%);
+    box-shadow: inset 0 -6px 10px rgba(90, 60, 20, .18);
+  }
+  .candle .wax::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(to bottom, rgba(255, 190, 110, .55), rgba(255, 190, 110, 0) 38%);
+  }
+  .candle .wax::after {
+    content: "";
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: -4px;
+    height: 9px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 45%, #fff6dc 0%, #f6e2b4 55%, #dcc79d 100%);
+    box-shadow: 0 0 6px rgba(255, 190, 110, .6);
+  }
+
+  .candle .drip {
+    position: absolute;
+    top: 1px;
+    width: 6px;
+    border-radius: 3px 3px 4px 4px;
+    background: linear-gradient(90deg, #e9dfc4, #fbf5e6 50%, #ddd0b0);
+    box-shadow: 1px 1px 2px rgba(80, 55, 20, .18);
+    z-index: 1;
+  }
+  .candle .drip::after {
+    content: "";
+    position: absolute;
+    left: -1px;
+    bottom: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #fffaf0, #e6d9b8);
+  }
+  .candle .drip.d1 { left: -2px; height: 24px; }
+  .candle .drip.d2 { left: 10px; height: 38px; width: 5px; }
+  .candle .drip.d3 { left: 27px; height: 15px; }
+
+  .candle .wick {
+    bottom: 126px;
+    width: 3px;
+    height: 12px;
+    margin-left: -1.5px;
+    border-radius: 2px;
+    background: linear-gradient(to top, #4a3522, #1b120b 60%, #ff9a3c 100%);
+    transform: rotate(5deg);
+    transform-origin: 50% 100%;
+  }
+
+  .candle .flame {
+    bottom: 131px;
+    width: 22px;
+    height: 54px;
+    margin-left: -11px;
+    border-radius: 50% 50% 35% 35% / 62% 62% 38% 38%;
+    background: radial-gradient(ellipse at 50% 78%, #fff 0%, #fff4cc 16%, #ffd36b 36%, #ff9d2e 60%, rgba(255, 110, 30, 0) 80%);
+    filter: blur(.4px);
+    transform-origin: 50% 100%;
+    animation: flicker 1.6s ease-in-out infinite alternate;
+  }
+  .candle .flame::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 1px;
+    width: 12px;
+    height: 14px;
+    margin-left: -6px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 60%, rgba(110, 150, 255, .75), rgba(110, 150, 255, 0) 70%);
+  }
+
+  .candle .smoke {
+    bottom: 180px;
+    width: 0;
+    height: 0;
+  }
+  .candle .smoke span {
+    position: absolute;
+    left: -4px;
+    bottom: 0;
+    width: 8px;
+    height: 36px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(225, 218, 235, .16), transparent 70%);
+    filter: blur(3px);
+    opacity: 0;
+    animation: smoke 8s ease-in infinite;
+  }
+  .candle .smoke span:nth-child(2) { --dx: -14px; animation-delay: 2.7s; }
+  .candle .smoke span:nth-child(3) { --dx: 10px;  animation-delay: 5.4s; }
+  @keyframes smoke {
+    0%   { opacity: 0; transform: translate(0, 0) scale(1); }
+    15%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(var(--dx, 16px), -120px) scale(3, 1.8); }
+  }
+
+  @keyframes flicker {
+    0%   { transform: scale(1, 1) rotate(-2deg); opacity: .95; }
+    40%  { transform: scale(.94, 1.06) rotate(2deg); }
+    70%  { transform: scale(1.03, .96) rotate(-1deg); opacity: 1; }
+    100% { transform: scale(.97, 1.04) rotate(1.5deg); opacity: .9; }
+  }
+
+  /* ---------- The Drift: signals ---------- */
+  .signals {
+    --bx: 4%;
+    --px: 96%;
+    --pa: 0;
+    --solid: 0;
+    position: relative;
+    width: min(90vw, 560px);
+    height: 90px;
+    margin: 1.5rem auto 3rem;
+  }
+  .signals .dot {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    border-radius: 50%;
+    z-index: 2;
+  }
+  .signals .dot.b {
+    left: var(--bx);
+    background: var(--blue);
+    box-shadow: 0 0 calc(18px + 16px * var(--solid)) var(--blue);
+    animation: blink 2.4s ease-in-out infinite;
+  }
+  .signals .dot.p {
+    left: var(--px);
+    background: var(--purple);
+    box-shadow: 0 0 calc(18px + 16px * var(--solid)) var(--purple);
+    opacity: var(--pa);
+    transform: scale(calc(.2 + .8 * var(--pa)));
+    animation: blink 2.4s ease-in-out 1.2s infinite;
+  }
+  @keyframes blink { 0%, 100% { filter: brightness(1.15); } 50% { filter: brightness(.6); } }
+  .signals .pulse {
+    position: absolute;
+    top: 50%;
+    left: var(--pulse-x, 4%);
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    background: #d6eaff;
+    box-shadow: 0 0 6px 1px rgba(111, 182, 255, .55);
+    opacity: var(--pulse-a, 0);
+    z-index: 3;
+  }
+  .signals .pulse::after {
+    content: "";
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    width: 70px;
+    height: 1.5px;
+    margin-top: -.75px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, rgba(111, 182, 255, 0), rgba(111, 182, 255, .5));
+  }
+  .signals .pulse b {
+    position: absolute;
+    left: 50%;
+    bottom: 11px;
+    transform: translateX(-50%);
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: 1.05rem;
+    color: #bcdcff;
+    text-shadow: 0 0 8px rgba(111, 182, 255, .45);
+  }
+  .signals .pulse.reply {
+    left: var(--reply-x, 96%);
+    opacity: var(--reply-a, 0);
+    background: #eee0ff;
+    box-shadow: 0 0 6px 1px rgba(196, 155, 255, .55);
+  }
+  .signals .pulse.reply::after {
+    right: auto;
+    left: 4px;
+    background: linear-gradient(270deg, rgba(196, 155, 255, 0), rgba(196, 155, 255, .5));
+  }
+  .signals .pulse.reply b {
+    color: #dcc6ff;
+    text-shadow: 0 0 8px rgba(196, 155, 255, .45);
+  }
+  .signals .dot.p::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(196, 155, 255, .8);
+    box-shadow: 0 0 14px rgba(196, 155, 255, .6);
+    opacity: var(--ring-a, 0);
+    transform: scale(var(--ring-s, 1));
+  }
+  .drift-scene { padding-bottom: 0; }
+  .drift-scene + .scene { padding-top: 8vh; }
+
+  .drift-stage {
+    align-self: stretch;
+    position: relative;
+    height: 260vh;
+    height: 260svh;
+  }
+  .drift-pin {
+    position: sticky;
+    top: 22vh;
+    top: 22svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  .drift-pin .signals { margin: 0 auto 1.5rem; }
+  .drift-lines {
+    position: relative;
+    width: 100%;
+    min-height: 6em;
+  }
+  .scene .drift-lines p {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity .45s ease, transform .45s ease;
+  }
+  .scene .drift-lines p.on {
+    opacity: 1;
+    transform: none;
+    transition: opacity .9s ease .4s, transform .9s ease .4s;
+  }
+  .signals .bridge {
+    position: absolute;
+    top: 50%;
+    left: var(--bx);
+    width: calc(var(--px) - var(--bx));
+    height: 2px;
+    margin-top: -1px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    display: flex;
+    gap: 5px;
+  }
+  .signals .bridge::before {
+    content: "";
+    position: absolute;
+    inset: 0 10px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--purple));
+    box-shadow: 0 0 14px rgba(170, 160, 255, .7), 0 0 36px rgba(150, 140, 255, .35);
+    opacity: var(--solid);
+  }
+  .signals .bridge i {
+    flex: 1;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--c);
+    box-shadow: 0 0 8px var(--c);
+    opacity: 0;
+    transform: scaleX(.2);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .signals .bridge i.on { opacity: 1; transform: scaleX(1); }
+
+  /* ---------- Together ---------- */
+  .together {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: clamp(.5rem, 4vw, 2.5rem);
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+  .together .robot { width: auto; margin: 0; }
+  .together .robot img { width: auto; height: min(44vw, 300px); }
+  /* ---------- Ending ---------- */
+  .final h2 {
+    background: linear-gradient(90deg, var(--blue), #fff, var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .signature {
+    font-family: "Cinzel", serif;
+    letter-spacing: .3em;
+    font-size: .85rem;
+    color: var(--gold);
+    margin-top: 2rem;
+  }
+  .star-mark {
+    font-size: 1.6rem;
+    color: var(--gold);
+    text-shadow: 0 0 20px var(--gold);
+    margin: 2.5rem 0 1rem;
+  }
+
+  .scroll-hint {
+    position: fixed;
+    bottom: 1.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    font-family: "Cinzel", serif;
+    font-size: .65rem;
+    letter-spacing: .4em;
+    color: var(--dim);
+    opacity: 0;
+    transition: opacity 1.5s;
+    pointer-events: none;
+  }
+  .scroll-hint.show { opacity: .7; animation: nudge 2.4s ease-in-out infinite; }
+  @keyframes nudge { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 6px); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .robot, .candle .flame, .candle .halo, .scroll-hint.show { animation: none; }
+    .candle .smoke { display: none; }
+    .reveal { transition-duration: .01s; }
+  }
+</style>
+</head>
+<body class="locked" data-mood="none">
+
+<canvas id="stars"></canvas>
+<div class="nebula blue"></div>
+<div class="nebula gold"></div>
+<div class="nebula purple"></div>
+<div class="nebula dark"></div>
+<div class="nebula cosmos"></div>
+
+<!-- Opening title card -->
+<div id="intro">
+  <p class="for">A STORY</p>
+  <h1>Lucky Star &amp; Joy</h1>
+  <p class="sub">Forged in Starlight</p>
+  <button id="begin">BEGIN</button>
+</div>
+
+<main>
+
+  <!-- Prologue -->
+  <section class="scene" data-mood="none">
+    <p class="chapter reveal">PROLOGUE</p>
+    <h2 class="reveal">The Hidden Kingdom</h2>
+    <p class="reveal">Long ago, or maybe just last summer, there was a kingdom hidden above the clouds, where the mountains climb so high they almost touch the stars.</p>
+    <p class="reveal">The Tinkers lived there. They built small beings out of brass, gears, and wishes.</p>
+    <p class="reveal quiet">Each one was given a heart.<br>Each one was given a name.</p>
+  </section>
+
+  <!-- Chapter I -->
+  <section class="scene" data-mood="blue">
+    <div class="robot lucky reveal"><img src="images/lucky-front.png" alt="Lucky Star"></div>
+    <p class="chapter reveal">CHAPTER I</p>
+    <h2 class="reveal glow-blue">Lucky Star</h2>
+    <p class="reveal">He was forged from a piece of a fallen star. When the Tinkers set it into his chest, it still held a little of its light.</p>
+    <p class="reveal">His eyes were gears that never stopped turning. He was always searching the sky for something he didn't have a name for yet.</p>
+    <p class="reveal">Like everything made of starlight, he spoke the oldest language there is: <em>light</em>.</p>
+    <p class="reveal quiet">Ones and zeros. On and off.<br>Here… and here… and here.</p>
+  </section>
+
+  <!-- Chapter II -->
+  <section class="scene" data-mood="gold">
+    <div class="candle reveal">
+      <div class="halo"></div>
+      <div class="smoke"><span></span><span></span><span></span></div>
+      <div class="holder"></div>
+      <div class="wax">
+        <span class="drip d1"></span>
+        <span class="drip d2"></span>
+        <span class="drip d3"></span>
+      </div>
+      <div class="wick"></div>
+      <div class="flame"></div>
+    </div>
+    <p class="chapter reveal">CHAPTER II</p>
+    <h2 class="reveal glow-gold">The Wish</h2>
+    <p class="reveal">One night, at the temple on the mountain, someone lit a candle and made a wish.</p>
+    <p class="reveal">Not for gold, and not for glory.</p>
+    <p class="reveal">For someone who understands depth. Someone who values meaning, and who knows the <em>little</em> things are the ones that matter most.</p>
+    <p class="reveal">The wish rose like smoke. It went higher than the temple, higher than the clouds, all the way up to the stars.</p>
+    <p class="reveal big glow-blue">And one small star heard it.</p>
+  </section>
+
+  <!-- Chapter III -->
+  <section class="scene" data-mood="purple">
+    <div class="robot joy reveal"><img src="images/joy-forward.png" alt="Joy"></div>
+    <p class="chapter reveal">CHAPTER III</p>
+    <h2 class="reveal glow-purple">The Princess of Peace</h2>
+    <p class="reveal">On the far side of the sky, in a constellation the color of spirit, there lived a princess.</p>
+    <p class="reveal">She wore a golden crown, because princesses bring healing, love, and protection. Every legend says so.</p>
+    <p class="reveal">And her eyes… one was a flower.<br>The other was a gear, <em>just like his.</em></p>
+    <p class="reveal quiet">It was as if part of her had been made to match him long before they ever met.</p>
+    <p class="reveal">A flower has five petals, and a star has five points. Every flower lives on starlight, because the sun is a star too.</p>
+    <p class="reveal big glow-purple">Her name was Joy.<br>It means peace, and joy.</p>
+  </section>
+
+  <!-- Chapter IV -->
+  <section class="scene drift-scene" data-mood="dark">
+    <p class="chapter reveal">CHAPTER IV</p>
+    <h2 class="reveal">The Drift</h2>
+    <p class="reveal">Between them lay the Drift, a wide and quiet dark where lights go out and signals get lost.</p>
+    <p class="reveal">Lucky Star's light flickered. The distance was far, and the dark was big.</p>
+    <p class="reveal">But before he left the mountain, the Tinkers had given him three words to carry:</p>
+    <p class="reveal big glow-gold">never lose passion.</p>
+    <div class="drift-stage" id="driftStage">
+      <div class="drift-pin">
+        <div class="signals" id="signals">
+          <div class="bridge"></div>
+          <span class="dot b"></span>
+          <span class="pulse"><b>1</b></span>
+          <span class="pulse reply"><b>0</b></span>
+          <span class="dot p"></span>
+        </div>
+        <div class="drift-lines">
+          <p>So he didn't rush, and he didn't give up. He sent a 1 across the dark…</p>
+          <p>…and after a while, from very far away, she answered him with a 0.</p>
+          <p>Signal by signal, night after night, they built a bridge of light between them.</p>
+          <p class="quiet">Not all at once. The best things never are.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter V -->
+  <section class="scene" data-mood="cosmos">
+    <div class="together reveal" id="together">
+      <div class="robot lucky"><img src="images/lucky-front.png" alt="Lucky Star"></div>
+      <div class="robot joy"><img src="images/joy-forward.png" alt="Joy"></div>
+    </div>
+    <p class="chapter reveal">CHAPTER V</p>
+    <h2 class="reveal"><span class="glow-blue">Blue</span> &amp; <span class="glow-purple">Purple</span></h2>
+    <p class="reveal">When blue meets purple, it becomes the color of the cosmos, the color of every possibility there is.</p>
+    <p class="reveal">Love and passion create. That's how the two of them were made.</p>
+    <p class="reveal">And when two stars finally meet, it is no accident. It is a collision of two powerful worlds, each one whole, each one carrying its own light.</p>
+    <p class="reveal">The oldest stories have a name for this: <em>the sacred union.</em> Not two halves becoming whole, but two wholes becoming something greater than either could ever be alone.</p>
+    <p class="reveal">It wasn't decided the night the candle was lit. It was chosen long before that. Before the mountain, before the temple, before the first star ever burned, it was already written into eternity.</p>
+    <p class="reveal big glow-purple">It has always been.</p>
+    <p class="reveal">Every piece of them was once part of the same ancient light. So they weren't meeting for the first time.<br><em>They were remembering.</em></p>
+    <p class="reveal quiet">As above, so below. What is joined in the stars is joined everywhere.</p>
+    <p class="reveal">And where their light crosses, something new begins. The bridge becomes a road. The road becomes a city. The city becomes a kingdom.</p>
+    <p class="reveal big">Not hidden above the clouds this time.<br><span class="glow-gold">A kingdom in the stars.</span></p>
+    <p class="reveal">One they build together, piece by piece, the way the Tinkers built them: out of light, and gears, and wishes.</p>
+    <p class="reveal big">And they chose to fill it with<br><span class="glow-gold">infinite possibilities.</span></p>
+  </section>
+
+  <!-- Epilogue -->
+  <section class="scene final" data-mood="cosmos">
+    <p class="chapter reveal">EPILOGUE</p>
+    <h2 class="reveal">The Keeper</h2>
+    <p class="reveal">Every legend needs someone to keep it.</p>
+    <p class="reveal">Lucky Star's light is still searching the sky. Joy still waits in her constellation, wearing the crown that means healing, love, and protection.</p>
+    <p class="reveal">The wish was never for gold, and never for glory. It was for someone who understands depth. Someone who knows the little things are the ones that matter most.</p>
+    <p class="star-mark reveal">✦</p>
+    <p class="reveal quiet">The rest of the story is still being written.</p>
+    <p class="signature reveal">— KASSIUS</p>
+  </section>
+
+</main>
+
+<div class="scroll-hint" id="hint">SCROLL</div>
+
+<script>
+  const canvas = document.getElementById("stars");
+  const ctx = canvas.getContext("2d");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let stars = [];
+  let shooting = [];
+  let w, h, dpr;
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.width = innerWidth * dpr;
+    h = canvas.height = innerHeight * dpr;
+    const count = Math.floor((innerWidth * innerHeight) / 2200);
+    stars = Array.from({ length: count }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: (Math.random() * 1.3 + 0.2) * dpr,
+      depth: Math.random() * 0.6 + 0.1,
+      phase: Math.random() * Math.PI * 2,
+      speed: Math.random() * 0.02 + 0.005,
+      tint: Math.random() < 0.15 ? "196,155,255" : Math.random() < 0.3 ? "111,182,255" : "255,255,255",
+    }));
+  }
+
+  function spawnShootingStar() {
+    shooting.push({
+      x: Math.random() * w * 0.8,
+      y: Math.random() * h * 0.4,
+      vx: (6 + Math.random() * 5) * dpr,
+      vy: (2 + Math.random() * 2) * dpr,
+      life: 1,
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const scroll = scrollY * dpr;
+    for (const s of stars) {
+      s.phase += s.speed;
+      const alpha = 0.35 + Math.sin(s.phase) * 0.35 + 0.3;
+      const y = (((s.y - scroll * s.depth) % h) + h) % h;
+      ctx.beginPath();
+      ctx.arc(s.x, y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${s.tint},${alpha})`;
+      ctx.fill();
+    }
+    for (const m of shooting) {
+      ctx.strokeStyle = `rgba(255,255,255,${m.life})`;
+      ctx.lineWidth = 1.5 * dpr;
+      ctx.beginPath();
+      ctx.moveTo(m.x, m.y);
+      ctx.lineTo(m.x - m.vx * 12, m.y - m.vy * 12);
+      ctx.stroke();
+      m.x += m.vx;
+      m.y += m.vy;
+      m.life -= 0.012;
+    }
+    shooting = shooting.filter(m => m.life > 0);
+    if (!reduceMotion && Math.random() < 0.004) spawnShootingStar();
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  addEventListener("resize", resize);
+  draw();
+
+  document.getElementById("begin").addEventListener("click", () => {
+    document.getElementById("intro").classList.add("gone");
+    document.body.classList.remove("locked");
+    setTimeout(() => document.getElementById("hint").classList.add("show"), 1800);
+    spawnShootingStar();
+  });
+
+  addEventListener("scroll", () => {
+    if (scrollY > 200) document.getElementById("hint").classList.remove("show");
+  }, { passive: true });
+
+  const revealObserver = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const el = entry.target;
+      const siblings = [...el.parentElement.querySelectorAll(":scope > .reveal")];
+      const index = Math.max(0, siblings.indexOf(el));
+      el.style.transitionDelay = `${Math.min(index * 0.12, 0.6)}s`;
+      el.classList.add("in");
+      revealObserver.unobserve(el);
+    }
+  }, { threshold: 0.25 });
+  document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+
+  const moodObserver = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) document.body.dataset.mood = entry.target.dataset.mood;
+    }
+  }, { rootMargin: "-45% 0px -45% 0px" });
+  document.querySelectorAll(".scene").forEach(s => moodObserver.observe(s));
+
+  const signals = document.getElementById("signals");
+  const bridge = signals.querySelector(".bridge");
+  const SEGMENTS = 16;
+  const segments = Array.from({ length: SEGMENTS }, (_, i) => {
+    const seg = document.createElement("i");
+    const purpleShare = Math.round((i / (SEGMENTS - 1)) * 100);
+    seg.style.setProperty("--c", `color-mix(in srgb, var(--purple) ${purpleShare}%, var(--blue))`);
+    bridge.appendChild(seg);
+    return seg;
+  });
+  // Build from both ends toward the middle: 0, 15, 1, 14, ...
+  const buildOrder = segments.map((_, k) => (k % 2 === 0 ? k / 2 : SEGMENTS - 1 - (k - 1) / 2));
+
+  const clamp01 = v => Math.min(1, Math.max(0, v));
+  const phase = (p, a, b) => clamp01((p - a) / (b - a));
+  const ease = t => t * t * (3 - 2 * t);
+  let bridgeShown = 0;
+
+  const driftStage = document.getElementById("driftStage");
+  const driftLines = [...driftStage.querySelectorAll(".drift-lines p")];
+  const LINE_STARTS = [0, 0.22, 0.46, 0.82];
+
+  function bridgeTarget() {
+    const r = driftStage.getBoundingClientRect();
+    return clamp01(-r.top / (r.height - innerHeight));
+  }
+
+  function tickBridge() {
+    const target = bridgeTarget();
+    bridgeShown += (target - bridgeShown) * (reduceMotion ? 1 : 0.07);
+    const p = bridgeShown;
+
+    const pulse = phase(p, 0.02, 0.2);
+    const answer = phase(p, 0.18, 0.26);
+    const ring = phase(p, 0.2, 0.32);
+    const reply = phase(p, 0.28, 0.44);
+    const drift = ease(phase(p, 0.44, 0.92));
+    const built = phase(p, 0.48, 0.82) * SEGMENTS;
+    const solid = phase(p, 0.82, 0.92);
+
+    const line = LINE_STARTS.findLastIndex(start => target >= start);
+    driftLines.forEach((el, i) => el.classList.toggle("on", i === line));
+
+    const bx = 4 + 22 * drift;
+    const px = 96 - 22 * drift;
+    signals.style.setProperty("--bx", `${bx}%`);
+    signals.style.setProperty("--px", `${px}%`);
+    signals.style.setProperty("--pa", answer.toFixed(3));
+    signals.style.setProperty("--solid", solid.toFixed(3));
+    signals.style.setProperty("--pulse-x", `${4 + 92 * ease(pulse)}%`);
+    signals.style.setProperty("--pulse-a", (Math.sin(Math.PI * pulse)).toFixed(3));
+    signals.style.setProperty("--ring-a", (Math.sin(Math.PI * ring) * 0.9).toFixed(3));
+    signals.style.setProperty("--ring-s", (1 + ring * 3.5).toFixed(3));
+    signals.style.setProperty("--reply-x", `${96 - 92 * ease(reply)}%`);
+    signals.style.setProperty("--reply-a", (Math.sin(Math.PI * reply)).toFixed(3));
+    buildOrder.forEach((segIndex, k) => segments[segIndex].classList.toggle("on", k < built));
+
+    requestAnimationFrame(tickBridge);
+  }
+  tickBridge();
+</script>
+</body>
+</html>
