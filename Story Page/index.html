@@ -470,15 +470,14 @@
 
   /* ---------- The Drift: signals ---------- */
   .signals {
-    --bx: 4%;
-    --px: 96%;
+    --bx: 18%;
+    --px: 82%;
     --pa: 0;
     --solid: 0;
     --sync: 0;
     position: relative;
     width: min(100%, 560px);
     height: 140px;
-    overflow-x: clip;
     margin: 1.5rem auto 3rem;
   }
   .signals .dot {
@@ -520,7 +519,7 @@
   .signals .pulse {
     position: absolute;
     top: 50%;
-    left: var(--pulse-x, 4%);
+    left: var(--pulse-x, 18%);
     width: 6px;
     height: 6px;
     margin: -3px 0 0 -3px;
@@ -533,9 +532,9 @@
   .signals .pulse::after {
     content: "";
     position: absolute;
-    right: 4px;
+    left: 8px;
     top: 50%;
-    width: 70px;
+    width: 48px;
     height: 1.5px;
     margin-top: -.75px;
     border-radius: 2px;
@@ -553,14 +552,14 @@
     text-shadow: 0 0 8px rgba(111, 182, 255, .45);
   }
   .signals .pulse.reply {
-    left: var(--reply-x, 96%);
+    left: var(--reply-x, 82%);
     opacity: var(--reply-a, 0);
     background: #eee0ff;
     box-shadow: 0 0 6px 1px rgba(196, 155, 255, .55);
   }
   .signals .pulse.reply::after {
-    right: auto;
-    left: 4px;
+    left: auto;
+    right: 8px;
     background: linear-gradient(270deg, rgba(196, 155, 255, 0), rgba(196, 155, 255, .5));
   }
   .signals .pulse.reply b {
@@ -568,11 +567,11 @@
     text-shadow: 0 0 8px rgba(196, 155, 255, .45);
   }
   .signals .pulse.again:not(.reply) {
-    left: var(--pulse2-x, 4%);
+    left: var(--pulse2-x, 18%);
     opacity: var(--pulse2-a, 0);
   }
   .signals .pulse.reply.again {
-    left: var(--reply2-x, 96%);
+    left: var(--reply2-x, 82%);
     opacity: var(--reply2-a, 0);
   }
   .signals .dot.p::after {
@@ -1148,8 +1147,8 @@
     const line = LINE_STARTS.findLastIndex(start => p >= start);
     driftLines.forEach((el, i) => el.classList.toggle("on", i === line));
 
-    const bx = 4 + 22 * drift;
-    const px = 96 - 22 * drift;
+    const bx = 18 + 14 * drift;
+    const px = 82 - 14 * drift;
     const span = px - bx;
     signals.style.setProperty("--bx", `${bx}%`);
     signals.style.setProperty("--px", `${px}%`);
