@@ -765,11 +765,17 @@
       padding-right: max(1.35rem, env(safe-area-inset-right));
     }
     .scene.open {
-      padding-top: 8svh;
-      padding-bottom: 16svh;
+      padding-top: 4svh;
+      padding-bottom: calc(5.25rem + env(safe-area-inset-bottom));
     }
+    .scene.open .chapter { margin-bottom: .35rem; }
+    .scene.open h2 { margin-bottom: 1.05rem; }
+    .scene.open p { margin-bottom: .85rem; }
     .scene p { margin-bottom: 1.15rem; }
     h2 { margin-bottom: 1.65rem; }
+    .scroll-hint {
+      bottom: max(.7rem, env(safe-area-inset-bottom));
+    }
     .drift-pin {
       top: 16vh;
       top: 16svh;
