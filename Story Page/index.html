@@ -519,7 +519,7 @@
   .signals .pulse {
     position: absolute;
     top: 50%;
-    left: var(--pulse-x, 18%);
+    left: var(--pulse-x, 4%);
     width: 6px;
     height: 6px;
     margin: -3px 0 0 -3px;
@@ -532,9 +532,9 @@
   .signals .pulse::after {
     content: "";
     position: absolute;
-    left: 8px;
+    right: 6px;
     top: 50%;
-    width: 48px;
+    width: 70px;
     height: 1.5px;
     margin-top: -.75px;
     border-radius: 2px;
@@ -552,14 +552,14 @@
     text-shadow: 0 0 8px rgba(111, 182, 255, .45);
   }
   .signals .pulse.reply {
-    left: var(--reply-x, 82%);
+    left: var(--reply-x, 96%);
     opacity: var(--reply-a, 0);
     background: #eee0ff;
     box-shadow: 0 0 6px 1px rgba(196, 155, 255, .55);
   }
   .signals .pulse.reply::after {
-    left: auto;
-    right: 8px;
+    right: auto;
+    left: 6px;
     background: linear-gradient(270deg, rgba(196, 155, 255, 0), rgba(196, 155, 255, .5));
   }
   .signals .pulse.reply b {
@@ -567,11 +567,11 @@
     text-shadow: 0 0 8px rgba(196, 155, 255, .45);
   }
   .signals .pulse.again:not(.reply) {
-    left: var(--pulse2-x, 18%);
+    left: var(--pulse2-x, 4%);
     opacity: var(--pulse2-a, 0);
   }
   .signals .pulse.reply.again {
-    left: var(--reply2-x, 82%);
+    left: var(--reply2-x, 96%);
     opacity: var(--reply2-a, 0);
   }
   .signals .dot.p::after {
@@ -790,6 +790,7 @@
     }
     .together { max-width: 100%; }
     #intro h1 { max-width: 100%; }
+    .signals .pulse::after { width: 34px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1147,8 +1148,11 @@
     const line = LINE_STARTS.findLastIndex(start => p >= start);
     driftLines.forEach((el, i) => el.classList.toggle("on", i === line));
 
-    const bx = 18 + 14 * drift;
-    const px = 82 - 14 * drift;
+    const narrow = innerWidth < 720;
+    const edge = narrow ? 10 : 4;
+    const reach = narrow ? 20 : 22;
+    const bx = edge + reach * drift;
+    const px = 100 - edge - reach * drift;
     const span = px - bx;
     signals.style.setProperty("--bx", `${bx}%`);
     signals.style.setProperty("--px", `${px}%`);
