@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #020108; }
+  canvas { position: absolute; inset: 0; }
+  .card {
+    position: relative;
+    z-index: 2;
+    width: 640px;
+    height: 630px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 78px;
+    text-align: center;
+  }
+  .for {
+    font-family: "Cinzel", serif;
+    letter-spacing: .55em;
+    font-size: 15px;
+    color: #a9a3c4;
+    margin: 0 0 0 .55em;
+  }
+  h1 {
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: 58px;
+    letter-spacing: .045em;
+    margin: 20px 0 6px;
+    background: linear-gradient(90deg, #6fb6ff, #fff 46%, #fff 54%, #c49bff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .sub {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 28px;
+    color: #a9a3c4;
+    margin: 0;
+  }
+  .peek {
+    position: absolute;
+    z-index: 1;
+    bottom: -20px;
+    pointer-events: none;
+    transform-origin: 50% 100%;
+  }
+  .peek img { display: block; height: 430px; width: auto; }
+  .peek.lucky {
+    left: 68px;
+    transform: rotate(11deg);
+  }
+  .peek.lucky img {
+    filter: drop-shadow(0 0 18px rgba(111, 182, 255, .55)) drop-shadow(0 0 42px rgba(111, 182, 255, .22));
+  }
+  .peek.joy {
+    right: 72px;
+    transform: rotate(-11deg);
+  }
+  .peek.joy img {
+    filter: drop-shadow(0 0 18px rgba(196, 155, 255, .6)) drop-shadow(0 0 42px rgba(196, 155, 255, .22));
+  }
+</style>
+</head>
+<body>
+<canvas id="stars" width="1200" height="630"></canvas>
+<div class="peek lucky"><img src="Story%20Page/images/lucky-front.png" alt=""></div>
+<div class="peek joy"><img src="Story%20Page/images/joy-forward.png" alt=""></div>
+<div class="card">
+  <p class="for">A STORY</p>
+  <h1>Lucky Star &amp; Joy</h1>
+  <p class="sub">Forged in Starlight</p>
+</div>
+<script>
+  const canvas = document.getElementById("stars");
+  const ctx = canvas.getContext("2d");
+  let seed = 0x9e3779b9;
+  function rand() {
+    seed = (Math.imul(1664525, seed) + 1013904223) >>> 0;
+    return seed / 4294967296;
+  }
+  for (let i = 0; i < 220; i++) {
+    const x = rand() * 1200;
+    const y = rand() * 630;
+    const r = rand() * 1.4 + 0.25;
+    const t = rand();
+    const tint = t < 0.15 ? "196,155,255" : t < 0.3 ? "111,182,255" : t < 0.38 ? "243,211,138" : "255,255,255";
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${tint},${0.35 + rand() * 0.65})`;
+    ctx.fill();
+  }
+</script>
+</body>
+</html>
