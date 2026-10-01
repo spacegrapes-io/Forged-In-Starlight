@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Lucky Star & Joy — Forged in Starlight</title>
 <meta name="description" content="A story, forged in starlight.">
-<meta name="theme-color" content="#020108">
+<meta name="theme-color" content="#04030b">
+<meta name="color-scheme" content="dark">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Forged in Starlight">
 <meta property="og:title" content="Lucky Star &amp; Joy">
@@ -34,10 +35,16 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    background: #04030b;
+    color-scheme: dark;
+    overscroll-behavior-y: none;
+  }
 
   body {
     background: #04030b;
+    overscroll-behavior-y: none;
     color: var(--ink);
     font-family: "Cormorant Garamond", Georgia, serif;
     font-size: clamp(1.15rem, 2.4vw, 1.45rem);
@@ -769,6 +776,9 @@
     @keyframes breathe {
       0%, 100% { box-shadow: 0 0 0 rgba(243, 211, 138, 0); border-color: rgba(255, 255, 255, .25); }
       50%      { box-shadow: 0 0 28px rgba(243, 211, 138, .42); border-color: rgba(243, 211, 138, .7); }
+    }
+    .scene.final {
+      padding-bottom: calc(12svh + env(safe-area-inset-bottom));
     }
     .scene {
       padding: 10svh 1.35rem 12svh;
