@@ -34,7 +34,11 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100%;
+  }
 
   body {
     background: #04030b;
@@ -43,6 +47,9 @@
     font-size: clamp(1.15rem, 2.4vw, 1.45rem);
     line-height: 1.7;
     overflow-x: hidden;
+    overflow-y: auto;
+    max-width: 100%;
+    touch-action: pan-y;
   }
 
   body.locked { overflow: hidden; }
@@ -57,10 +64,13 @@
 
   .nebula {
     position: fixed;
-    inset: -20%;
+    inset: 0;
     z-index: 0;
     pointer-events: none;
     opacity: 0;
+    background-repeat: no-repeat;
+    background-size: 145% 145%;
+    background-position: center;
     transition: opacity 2.5s ease;
   }
   .nebula.blue   { background: radial-gradient(ellipse at 30% 40%, rgba(40, 90, 200, .35), transparent 60%); }
@@ -472,8 +482,9 @@
     --solid: 0;
     --sync: 0;
     position: relative;
-    width: min(90vw, 560px);
+    width: min(100%, 560px);
     height: 140px;
+    overflow-x: clip;
     margin: 1.5rem auto 3rem;
   }
   .signals .dot {
@@ -780,6 +791,12 @@
       top: 16vh;
       top: 16svh;
     }
+    .scene p.charge {
+      letter-spacing: .1em;
+      font-size: 1em;
+    }
+    .together { max-width: 100%; }
+    #intro h1 { max-width: 100%; }
   }
 
   @media (prefers-reduced-motion: reduce) {
