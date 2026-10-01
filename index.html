@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background:#04030b;color-scheme:dark">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#04030b">
 <title>Lucky Star & Joy — Forged in Starlight</title>
 <meta name="description" content="A story, forged in starlight.">
-<meta name="theme-color" content="#020108">
+<style>html,body{background:#04030b;color-scheme:dark}</style>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Forged in Starlight">
 <meta property="og:title" content="Lucky Star &amp; Joy">
@@ -19,9 +22,1188 @@
 <meta name="twitter:title" content="Lucky Star &amp; Joy">
 <meta name="twitter:description" content="A story, forged in starlight.">
 <meta name="twitter:image" content="https://spacegrapes-io.github.io/Forged-In-Starlight/og.png">
-<meta http-equiv="refresh" content="0; url=Story%20Page/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #6fb6ff;
+    --purple: #c49bff;
+    --gold: #f3d38a;
+    --ink: #e9e6f5;
+    --dim: #a9a3c4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    background: #04030b;
+    color-scheme: dark;
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    background: #04030b;
+    overscroll-behavior-y: none;
+    color: var(--ink);
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+    line-height: 1.7;
+    overflow-x: hidden;
+    touch-action: pan-y;
+  }
+
+  body.locked { overflow: hidden; }
+
+  #stars {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .nebula {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    background-repeat: no-repeat;
+    background-size: 145% 145%;
+    background-position: center;
+    transition: opacity 2.5s ease;
+  }
+  .nebula.blue   { background: radial-gradient(ellipse at 30% 40%, rgba(40, 90, 200, .35), transparent 60%); }
+  .nebula.gold   { background: radial-gradient(ellipse at 50% 60%, rgba(220, 150, 60, .22), transparent 55%); }
+  .nebula.purple { background: radial-gradient(ellipse at 70% 40%, rgba(140, 70, 220, .35), transparent 60%); }
+  .nebula.dark   { background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, .55), transparent 70%); }
+  .nebula.cosmos {
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(50, 110, 230, .35), transparent 55%),
+      radial-gradient(ellipse at 70% 50%, rgba(150, 80, 230, .35), transparent 55%);
+  }
+  body[data-mood="blue"]   .nebula.blue,
+  body[data-mood="gold"]   .nebula.gold,
+  body[data-mood="purple"] .nebula.purple,
+  body[data-mood="dark"]   .nebula.dark,
+  body[data-mood="cosmos"] .nebula.cosmos { opacity: 1; }
+
+  /* ---------- Opening title card ---------- */
+  #intro {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #020108;
+    transition: opacity 2s ease, visibility 2s;
+  }
+  #intro.gone { opacity: 0; visibility: hidden; }
+  #intro::before, #intro::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    height: 11vh;
+    background: #000;
+  }
+  #intro::before { top: 0; }
+  #intro::after  { bottom: 0; }
+
+  .for {
+    font-family: "Cinzel", serif;
+    letter-spacing: .5em;
+    font-size: .8rem;
+    color: var(--dim);
+    opacity: 0;
+    animation: fadeIn 2s ease .5s forwards;
+  }
+  .for span { color: var(--gold); }
+
+  #intro h1 {
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: clamp(2rem, 7vw, 4.2rem);
+    letter-spacing: .08em;
+    margin: 1.4rem 0 .4rem;
+    background: linear-gradient(90deg, var(--blue), #fff, var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0;
+    animation: fadeIn 2.5s ease 1.6s forwards;
+  }
+  #intro .sub {
+    font-style: italic;
+    color: var(--dim);
+    opacity: 0;
+    animation: fadeIn 2s ease 2.8s forwards;
+  }
+  #begin {
+    margin-top: 3rem;
+    font-family: "Cinzel", serif;
+    letter-spacing: .3em;
+    font-size: .8rem;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, .25);
+    padding: .9rem 2.2rem;
+    border-radius: 999px;
+    cursor: pointer;
+    opacity: 0;
+    -webkit-tap-highlight-color: transparent;
+    animation: fadeIn 2s ease 4s forwards, breathe 3.5s ease-in-out 4s infinite;
+    transition: border-color .4s, box-shadow .4s;
+  }
+  #begin:active { border-color: var(--gold); }
+
+  @media (hover: hover) {
+    #begin:hover { border-color: var(--gold); box-shadow: 0 0 25px rgba(243, 211, 138, .35); }
+  }
+
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes breathe {
+    0%, 100% { box-shadow: 0 0 0 rgba(243, 211, 138, 0); border-color: rgba(255, 255, 255, .25); }
+    50%      { box-shadow: 0 0 22px rgba(243, 211, 138, .3); border-color: rgba(243, 211, 138, .55); }
+  }
+
+  /* ---------- Scenes ---------- */
+  main { position: relative; z-index: 1; }
+
+  .scene {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16svh 1.5rem;
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+  .scene.open {
+    justify-content: flex-start;
+    padding-top: 11svh;
+    padding-bottom: 20svh;
+  }
+
+  .chapter {
+    font-family: "Cinzel", serif;
+    letter-spacing: .45em;
+    font-size: .75rem;
+    color: var(--gold);
+    margin-bottom: .6rem;
+  }
+  h2 {
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    letter-spacing: .06em;
+    margin-bottom: 2.2rem;
+  }
+  .scene p { margin-bottom: 1.3rem; }
+  .scene p.quiet { color: var(--dim); font-style: italic; }
+  .scene p.big {
+    font-size: 1.3em;
+    font-style: italic;
+  }
+  .scene p.charge {
+    font-family: "Cinzel", serif;
+    font-style: normal;
+    font-size: 1.15em;
+    letter-spacing: .18em;
+  }
+  .glow-blue   { color: var(--blue);   text-shadow: 0 0 18px rgba(111, 182, 255, .6); }
+  .glow-purple { color: var(--purple); text-shadow: 0 0 18px rgba(196, 155, 255, .6); }
+  h2.infinity { letter-spacing: .14em; }
+  h2.infinity .glow-blue {
+    text-shadow: 0 0 16px rgba(111, 182, 255, .75), 0 0 38px rgba(111, 182, 255, .35);
+  }
+  h2.infinity .glow-purple {
+    text-shadow: 0 0 16px rgba(196, 155, 255, .8), 0 0 42px rgba(196, 155, 255, .42);
+  }
+  .glow-gold   { color: var(--gold);   text-shadow: 0 0 18px rgba(243, 211, 138, .6); }
+  .glow-white  { color: #fff;          text-shadow: 0 0 18px rgba(255, 255, 255, .7), 0 0 40px rgba(233, 230, 245, .35); }
+  .glow-drift  {
+    position: relative;
+    color: #7a7688;
+    text-shadow: 0 0 2px rgba(200, 205, 220, .22);
+  }
+  h2.glow-drift::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 150%;
+    height: 240%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse at 50% 50%,
+      rgba(0, 0, 0, .95) 0%,
+      rgba(0, 0, 0, .7) 40%,
+      rgba(4, 3, 11, .28) 64%,
+      transparent 80%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(4px);
+    transition: opacity 1.6s ease, transform 1.6s ease, filter 1.6s ease;
+  }
+  .reveal.in { opacity: 1; transform: none; filter: none; }
+
+  /* ---------- Robots ---------- */
+  .robot {
+    width: fit-content;
+    margin: 0 auto 2.5rem;
+    animation: float 6s ease-in-out infinite;
+  }
+  .robot img { height: min(70vw, 320px); width: auto; display: block; }
+  .robot.lucky img {
+    filter: drop-shadow(0 0 22px rgba(111, 182, 255, .55)) drop-shadow(0 0 60px rgba(111, 182, 255, .25));
+    animation: luckyGlow 3.4s ease-in-out infinite alternate;
+  }
+  @keyframes luckyGlow {
+    from { filter: drop-shadow(0 0 16px rgba(111, 182, 255, .4)) drop-shadow(0 0 40px rgba(111, 182, 255, .15)); }
+    to   { filter: drop-shadow(0 0 28px rgba(111, 182, 255, .75)) drop-shadow(0 0 72px rgba(111, 182, 255, .35)); }
+  }
+  .robot.joy img {
+    filter: drop-shadow(0 0 22px rgba(196, 155, 255, .6)) drop-shadow(0 0 60px rgba(196, 155, 255, .25));
+    animation: joyGlow 3.4s ease-in-out 1.7s infinite alternate;
+  }
+  @keyframes joyGlow {
+    from { filter: drop-shadow(0 0 16px rgba(196, 155, 255, .4)) drop-shadow(0 0 40px rgba(196, 155, 255, .15)); }
+    to   { filter: drop-shadow(0 0 28px rgba(196, 155, 255, .8)) drop-shadow(0 0 72px rgba(196, 155, 255, .35)); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-16px); }
+  }
+
+  /* ---------- Candle ---------- */
+  .candle {
+    position: relative;
+    width: 140px;
+    height: 200px;
+    margin: 0 auto 3rem;
+  }
+  .candle > * { position: absolute; left: 50%; }
+
+  .candle .halo {
+    bottom: 88px;
+    width: 220px;
+    height: 220px;
+    margin-left: -110px;
+    z-index: 0;
+    background: radial-gradient(circle at 50% 58%,
+      rgba(255, 220, 150, .85) 0%,
+      rgba(255, 176, 70, .4) 18%,
+      rgba(255, 150, 40, .16) 38%,
+      rgba(255, 130, 30, .04) 58%,
+      transparent 74%);
+    filter: blur(10px);
+    pointer-events: none;
+    animation: breatheGlow 3.2s ease-in-out infinite alternate;
+  }
+  @keyframes breatheGlow {
+    from { opacity: .75; transform: scale(.96); }
+    to   { opacity: 1;   transform: scale(1.04); }
+  }
+
+  .candle .holder {
+    bottom: -2px;
+    width: 128px;
+    height: 36px;
+    margin-left: -64px;
+    z-index: 0;
+    border-radius: 50%;
+    background:
+      radial-gradient(ellipse at 50% 55%, #6a4214 0 22%, #c49238 23% 34%, #e2bc64 46%, #a87428 62%, #d7a84c 78%, #8d5c18 100%);
+    box-shadow:
+      0 7px 9px rgba(0, 0, 0, .32),
+      inset 0 -3px 4px rgba(80, 44, 8, .25);
+  }
+  .candle .holder::before,
+  .candle .holder::after { content: none; }
+
+  .candle .wax {
+    bottom: 16px;
+    z-index: 1;
+    width: 34px;
+    height: 118px;
+    margin-left: -17px;
+    border-radius: 6px 6px 5px 5px;
+    overflow: visible;
+    background: linear-gradient(90deg, #c9bb98 0%, #ece2c8 24%, #fbf5e6 44%, #efe5cd 66%, #b9a782 100%);
+    box-shadow: inset 0 -6px 10px rgba(90, 60, 20, .18);
+  }
+  .candle .drips {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 34px;
+    height: 112px;
+    overflow: visible;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .candle .wax::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(to bottom, rgba(255, 190, 110, .55), rgba(255, 190, 110, 0) 38%);
+  }
+  .candle .wax::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    top: -2px;
+    height: 10px;
+    z-index: 3;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 42%, rgba(196, 140, 70, .45) 0 18%, #f3e2c0 46%, #fff8ec 72%, #e6d3ae 100%);
+    box-shadow: inset 0 2px 2px rgba(130, 86, 28, .22);
+  }
+
+
+  .candle .wick {
+    bottom: 132px;
+    width: 2px;
+    height: 18px;
+    margin-left: -1px;
+    z-index: 6;
+    border-radius: 1px;
+    background: linear-gradient(to top, #6a4528 0%, #1c120c 55%, #0c0908 100%);
+    transform: rotate(4deg);
+    transform-origin: 50% 100%;
+  }
+
+  .candle .flame {
+    bottom: 140px;
+    z-index: 5;
+    width: 36px;
+    height: 64px;
+    margin-left: -18px;
+    transform-origin: 50% 94%;
+    animation: flicker 2.6s ease-in-out infinite;
+  }
+  .candle .flame i {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform-origin: 50% 100%;
+    pointer-events: none;
+  }
+  .candle .flame .aura {
+    width: 36px;
+    height: 58px;
+    margin-left: -18px;
+    border-radius: 50% 50% 42% 42% / 68% 68% 32% 32%;
+    background: radial-gradient(ellipse at 50% 72%, rgba(255, 176, 64, .5), rgba(255, 110, 24, .16) 46%, transparent 72%);
+    filter: blur(2.2px);
+  }
+  .candle .flame .tongue {
+    width: 16px;
+    height: 50px;
+    margin-left: -8px;
+    bottom: 3px;
+    border-radius: 48% 52% 42% 42% / 64% 60% 36% 40%;
+    background: radial-gradient(ellipse at 48% 74%, #fff 0%, #ffe7a2 16%, #ffc24a 40%, #ff8c1c 66%, rgba(255, 80, 8, 0) 80%);
+    filter: blur(.25px);
+    animation: tongue 2.6s ease-in-out infinite;
+  }
+  .candle .flame .core {
+    width: 7px;
+    height: 26px;
+    margin-left: -3.5px;
+    bottom: 12px;
+    border-radius: 50% 50% 46% 46% / 58% 58% 42% 42%;
+    background: radial-gradient(ellipse at 50% 82%, #fff 0%, #fff4c4 46%, rgba(255, 214, 90, 0) 78%);
+  }
+  .candle .flame .blue {
+    width: 9px;
+    height: 11px;
+    margin-left: -4.5px;
+    bottom: 1px;
+    border-radius: 46% 46% 50% 50% / 30% 30% 70% 70%;
+    background: radial-gradient(ellipse at 50% 85%, rgba(80, 130, 255, .95), rgba(140, 180, 255, .4) 42%, transparent 74%);
+  }
+
+  .candle .smoke {
+    bottom: 180px;
+    width: 0;
+    height: 0;
+  }
+  .candle .smoke span {
+    position: absolute;
+    left: -4px;
+    bottom: 0;
+    width: 8px;
+    height: 36px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(225, 218, 235, .16), transparent 70%);
+    filter: blur(3px);
+    opacity: 0;
+    animation: smoke 8s ease-in infinite;
+  }
+  .candle .smoke span:nth-child(2) { --dx: -14px; animation-delay: 2.7s; }
+  .candle .smoke span:nth-child(3) { --dx: 10px;  animation-delay: 5.4s; }
+  @keyframes smoke {
+    0%   { opacity: 0; transform: translate(0, 0) scale(1); }
+    15%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(var(--dx, 16px), -120px) scale(3, 1.8); }
+  }
+
+  @keyframes flicker {
+    0%   { transform: translateX(0) rotate(-1deg) scale(1, 1); }
+    14%  { transform: translateX(-1.5px) rotate(-5deg) scale(.98, 1.05); }
+    31%  { transform: translateX(1.6px) rotate(4deg) scale(1.03, .95); }
+    47%  { transform: translateX(.2px) rotate(1deg) scale(.97, 1.08); }
+    63%  { transform: translateX(-1.4px) rotate(-4deg) scale(1.02, .93); }
+    79%  { transform: translateX(1.2px) rotate(5deg) scale(.99, 1.04); }
+    91%  { transform: translateX(-.4px) rotate(-2deg) scale(1.01, .98); }
+    100% { transform: translateX(0) rotate(-1deg) scale(1, 1); }
+  }
+  @keyframes tongue {
+    0%   { transform: rotate(0deg) scaleY(1); }
+    18%  { transform: rotate(7deg) scaleY(1.07); }
+    39%  { transform: rotate(-5deg) scaleY(.92); }
+    61%  { transform: rotate(3deg) scaleY(1.05); }
+    82%  { transform: rotate(-6deg) scaleY(.96); }
+    100% { transform: rotate(0deg) scaleY(1); }
+  }
+
+  /* ---------- The Drift: signals ---------- */
+  .signals {
+    --bx: 18%;
+    --px: 82%;
+    --pa: 0;
+    --solid: 0;
+    --sync: 0;
+    position: relative;
+    width: min(100%, 560px);
+    height: 140px;
+    margin: 1.5rem auto 3rem;
+  }
+  .signals .dot {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    border-radius: 50%;
+    z-index: 2;
+  }
+  .signals .dot.b {
+    left: var(--bx);
+    background: var(--blue);
+    box-shadow: 0 0 calc(18px + 16px * var(--solid)) var(--blue);
+    animation: blink 2.4s ease-in-out infinite;
+  }
+  .signals .dot.p {
+    left: var(--px);
+    background: var(--purple);
+    box-shadow: 0 0 calc(18px + 16px * var(--solid)) var(--purple);
+    opacity: var(--pa);
+    transform: scale(calc(.2 + .8 * var(--pa)));
+    animation: blink 2.4s ease-in-out calc(1.2s * (1 - var(--sync))) infinite;
+  }
+  .signals .field {
+    position: absolute;
+    top: 50%;
+    left: var(--bx);
+    width: calc(var(--px) - var(--bx));
+    height: 90px;
+    margin-top: -45px;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 50%, rgba(170, 160, 255, .35), rgba(111, 182, 255, .12) 42%, transparent 72%);
+    filter: blur(10px);
+    opacity: calc(var(--sync) * .7);
+  }
+  @keyframes blink { 0%, 100% { filter: brightness(1.15); } 50% { filter: brightness(.6); } }
+  .signals .pulse {
+    position: absolute;
+    top: 50%;
+    left: var(--pulse-x, 4%);
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    background: #d6eaff;
+    box-shadow: 0 0 6px 1px rgba(111, 182, 255, .55);
+    opacity: var(--pulse-a, 0);
+    z-index: 3;
+  }
+  .signals .pulse::after {
+    content: "";
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    width: 70px;
+    height: 1.5px;
+    margin-top: -.75px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, rgba(111, 182, 255, 0), rgba(111, 182, 255, .5));
+  }
+  .signals .pulse b {
+    position: absolute;
+    left: 50%;
+    bottom: 11px;
+    transform: translateX(-50%);
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: 1.05rem;
+    color: #bcdcff;
+    text-shadow: 0 0 8px rgba(111, 182, 255, .45);
+  }
+  .signals .pulse.reply {
+    left: var(--reply-x, 96%);
+    opacity: var(--reply-a, 0);
+    background: #eee0ff;
+    box-shadow: 0 0 6px 1px rgba(196, 155, 255, .55);
+  }
+  .signals .pulse.reply::after {
+    right: auto;
+    left: 6px;
+    background: linear-gradient(270deg, rgba(196, 155, 255, 0), rgba(196, 155, 255, .5));
+  }
+  .signals .pulse.reply b {
+    color: #dcc6ff;
+    text-shadow: 0 0 8px rgba(196, 155, 255, .45);
+  }
+  .signals .pulse.again:not(.reply) {
+    left: var(--pulse2-x, 4%);
+    opacity: var(--pulse2-a, 0);
+  }
+  .signals .pulse.reply.again {
+    left: var(--reply2-x, 96%);
+    opacity: var(--reply2-a, 0);
+  }
+  .signals .dot.p::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(196, 155, 255, .8);
+    box-shadow: 0 0 14px rgba(196, 155, 255, .6);
+    opacity: var(--ring-a, 0);
+    transform: scale(var(--ring-s, 1));
+  }
+  .drift-scene { padding-bottom: 0; }
+  .drift-scene + .scene { padding-top: 8vh; }
+
+  .drift-stage {
+    align-self: stretch;
+    position: relative;
+    height: 260vh;
+    height: 260svh;
+  }
+  .drift-pin {
+    position: sticky;
+    top: 22vh;
+    top: 22svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  .drift-pin .signals { margin: 0 auto 1.5rem; }
+  .drift-lines {
+    position: relative;
+    width: 100%;
+    min-height: 8em;
+  }
+  .scene .drift-lines p {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity .45s ease, transform .45s ease;
+  }
+  .scene .drift-lines p.on {
+    opacity: 1;
+    transform: none;
+    transition: opacity .9s ease .4s, transform .9s ease .4s;
+  }
+  .signals .bridge {
+    position: absolute;
+    top: 50%;
+    left: var(--bx);
+    width: calc(var(--px) - var(--bx));
+    height: 2px;
+    margin-top: -1px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    display: flex;
+    gap: 5px;
+  }
+  .signals .bridge::before {
+    content: "";
+    position: absolute;
+    inset: 0 10px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--purple));
+    box-shadow: 0 0 14px rgba(170, 160, 255, .7), 0 0 36px rgba(150, 140, 255, .35);
+    opacity: var(--solid);
+  }
+  .signals .bridge i {
+    flex: 1;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--c);
+    box-shadow: 0 0 8px var(--c);
+    opacity: 0;
+    transform: scaleX(.2);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .signals .flower {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 230px;
+    height: 230px;
+    margin: -115px 0 0 -115px;
+    color: rgba(243, 211, 138, .9);
+    opacity: calc(var(--solid) * .72);
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 8px rgba(243, 211, 138, .45));
+  }
+  .signals .beam {
+    position: absolute;
+    top: 50%;
+    left: var(--bx);
+    width: calc(var(--px) - var(--bx));
+    height: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: var(--solid);
+  }
+  .signals .beam::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: -5px;
+    height: 10px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--blue), #fff 48%, #fff 52%, var(--purple));
+    box-shadow:
+      0 0 16px 4px rgba(255, 255, 255, .55),
+      0 0 48px 14px rgba(170, 160, 255, .45),
+      0 0 90px 28px rgba(111, 182, 255, .18);
+  }
+  .signals .beam::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -68px;
+    width: 2px;
+    height: 136px;
+    margin-left: -1px;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, .9), transparent);
+    box-shadow: 0 0 18px 6px rgba(230, 220, 255, .4);
+  }
+
+  /* ---------- Together ---------- */
+  .together {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: clamp(.5rem, 4vw, 2.5rem);
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+  .together .robot { width: auto; margin: 0; }
+  .together .robot img { width: auto; height: min(44vw, 300px); }
+  /* ---------- Ending ---------- */
+  .final h2 {
+    background: linear-gradient(90deg, var(--blue), #fff, var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .signature {
+    font-family: "Cinzel", serif;
+    letter-spacing: .3em;
+    font-size: .85rem;
+    color: var(--gold);
+    margin-top: 2rem;
+  }
+  .star-mark {
+    font-size: 1.6rem;
+    color: var(--gold);
+    text-shadow: 0 0 20px var(--gold);
+    margin: 2.5rem 0 1rem;
+  }
+
+  .scroll-hint {
+    position: fixed;
+    bottom: 1.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    font-family: "Cinzel", serif;
+    font-size: .65rem;
+    letter-spacing: .4em;
+    color: var(--dim);
+    opacity: 0;
+    transition: opacity 1.5s;
+    pointer-events: none;
+  }
+  .scroll-hint.show { opacity: .7; animation: nudge 2.4s ease-in-out infinite; }
+  @keyframes nudge { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 6px); } }
+
+  @media (max-width: 720px) {
+    #begin {
+      margin-top: 2.4rem;
+      padding: 1rem 2.5rem;
+      animation: fadeIn 2s ease 4s forwards, breathe 3.2s ease-in-out 4s infinite;
+    }
+    @keyframes breathe {
+      0%, 100% { box-shadow: 0 0 0 rgba(243, 211, 138, 0); border-color: rgba(255, 255, 255, .25); }
+      50%      { box-shadow: 0 0 28px rgba(243, 211, 138, .42); border-color: rgba(243, 211, 138, .7); }
+    }
+    .scene.final {
+      padding-bottom: calc(12svh + env(safe-area-inset-bottom));
+    }
+    .scene {
+      padding: 10svh 1.35rem 12svh;
+      padding-left: max(1.35rem, env(safe-area-inset-left));
+      padding-right: max(1.35rem, env(safe-area-inset-right));
+    }
+    .scene.open {
+      padding-top: 4svh;
+      padding-bottom: calc(5.25rem + env(safe-area-inset-bottom));
+    }
+    .scene.open .chapter { margin-bottom: .35rem; }
+    .scene.open h2 { margin-bottom: 1.05rem; }
+    .scene.open p { margin-bottom: .85rem; }
+    .scene p { margin-bottom: 1.15rem; }
+    h2 { margin-bottom: 1.65rem; }
+    .scroll-hint {
+      bottom: max(.7rem, env(safe-area-inset-bottom));
+    }
+    .drift-pin {
+      top: 16vh;
+      top: 16svh;
+    }
+    .scene p.charge {
+      letter-spacing: .1em;
+      font-size: 1em;
+    }
+    .together { max-width: 100%; }
+    #intro h1 { max-width: 100%; }
+    .signals .pulse::after { width: 34px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .robot, .robot img, .candle .flame, .candle .flame i, .candle .halo, .scroll-hint.show { animation: none; }
+    .candle .smoke { display: none; }
+    .reveal { transition-duration: .01s; }
+  }
+</style>
 </head>
-<body>
-<p><a href="Story%20Page/">Open the story</a></p>
+<body class="locked" data-mood="none">
+
+<canvas id="stars"></canvas>
+<div class="nebula blue"></div>
+<div class="nebula gold"></div>
+<div class="nebula purple"></div>
+<div class="nebula dark"></div>
+<div class="nebula cosmos"></div>
+
+<!-- Opening title card -->
+<div id="intro">
+  <p class="for">A STORY</p>
+  <h1>Lucky Star &amp; Joy</h1>
+  <p class="sub">Forged in Starlight</p>
+  <button id="begin">BEGIN</button>
+</div>
+
+<main>
+
+  <!-- Prologue -->
+  <section class="scene open" data-mood="none">
+    <p class="chapter reveal">PROLOGUE</p>
+    <h2 class="reveal glow-white">Starlight</h2>
+    <p class="reveal">Far across the sky, there was a star that glowed so bright the night around it turned gold.</p>
+    <p class="reveal">Until one day the star exploded. A supernova lit the universe, so beautiful it seemed the night had been waiting for it.</p>
+    <p class="reveal">Stardust gathered. It founded the mountains, and it poured down the stone, still burning. From that gathering a new world began.</p>
+    <p class="reveal">Hidden above the clouds, where the mountains climb so high they almost touch the sky, there was a kingdom. That kingdom is Starlight.</p>
+    <p class="reveal">The Wishwrights lived there. They built small beings out of brass, gears, and wishes, and whispered them awake.</p>
+    <p class="reveal quiet">Each one was given a heart.<br>Each one was given a name.</p>
+  </section>
+
+  <!-- Chapter I -->
+  <section class="scene" data-mood="blue">
+    <div class="robot lucky reveal"><img src="Story%20Page/images/lucky-front.png" alt="Lucky Star"></div>
+    <p class="chapter reveal">CHAPTER I</p>
+    <h2 class="reveal glow-blue">Lucky Star</h2>
+    <p class="reveal">Lucky was forged from a shooting star. When the Wishwrights caught it and set it into his chest, it still held its glow.</p>
+    <p class="reveal">The star had five points. Four for earth, air, fire, and water. And one for aether: spirit, the quiet gold between things.</p>
+    <p class="reveal">His eyes were gears that never stopped turning. They gathered wishes out of the dark.</p>
+    <p class="reveal">The star in his chest answered them. He spoke in <em>light</em>, the oldest language there is. That is how a wish finds its way.</p>
+    <p class="reveal quiet">Ones and zeros.</p>
+  </section>
+
+  <!-- Chapter II -->
+  <section class="scene" data-mood="gold">
+    <div class="candle reveal">
+      <div class="halo"></div>
+      <div class="smoke"><span></span><span></span><span></span></div>
+      <div class="holder"></div>
+      <div class="wax">
+        <svg class="drips" viewBox="0 0 34 112" aria-hidden="true">
+          <defs>
+            <linearGradient id="dripShade" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#d9c7a4"/>
+              <stop offset=".5" stop-color="#fbf3e2"/>
+              <stop offset="1" stop-color="#e4d2b0"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#dripShade)" d="M5 2c2.4 0 3.6 3 3.2 8-.5 7 .4 16-.2 26-.5 8 .6 14 0 18-.6 4-2.4 5.6-1.2 7.4 1.1 1.6 2.8 1.2 1.8-1.2-.8-2-1.6-3-.8-6.6.7-4-.4-12 .4-20 .8-9 1.4-18 .6-24C8.2 4.2 6.6 2 5 2z"/>
+          <path fill="url(#dripShade)" d="M25 4c2.2.2 3.2 2.6 2.8 6.4-.4 5 .4 10 0 14.6-.4 4.2-1.8 6.2-.8 8 .9 1.6 2.4 1.2 1.6-.8-.7-1.6-1-2.4-.6-5.4.4-3.4-.2-8-.4-12.4-.2-4 .4-7.4 0-10-.3-2-1.6-2.6-3-2.4z"/>
+        </svg>
+      </div>
+      <div class="wick"></div>
+      <div class="flame"><i class="aura"></i><i class="tongue"></i><i class="core"></i><i class="blue"></i></div>
+    </div>
+    <p class="chapter reveal">CHAPTER II</p>
+    <h2 class="reveal glow-gold">The Wish</h2>
+    <p class="reveal">One night, at the temple on the mountain, Lucky lit a candle and made a wish of his own.</p>
+    <p class="reveal">Not for gold, and not for glory.</p>
+    <p class="reveal">For someone who understands depth. Someone who values meaning, and who treats the world as if it were magic, and so it is.</p>
+    <p class="reveal">The wish rose like smoke. It went higher than the temple, higher than the clouds, all the way up to the stars.</p>
+    <p class="reveal big glow-purple">And in the distance, another star heard his song, and began to dance.</p>
+  </section>
+
+  <!-- Chapter III -->
+  <section class="scene" data-mood="purple">
+    <div class="robot joy reveal"><img src="Story%20Page/images/joy-forward.png" alt="Joy"></div>
+    <p class="chapter reveal">CHAPTER III</p>
+    <h2 class="reveal glow-purple">The Princess</h2>
+    <p class="reveal">On the far side of the sky, in a constellation the color of spirit, there lived a princess. Purple is the color of a mind that has climbed a little closer to the stars.</p>
+    <p class="reveal">She wore a golden crown, because princesses bring healing, love, and protection. Every legend says so.</p>
+    <p class="reveal">And her eyes… one was a flower.<br>The other was a gear, <em>just like his.</em></p>
+    <p class="reveal quiet">It was as if part of her had been made to match him long before they ever met.</p>
+    <p class="reveal">A flower has five petals, and a star has five points. Every flower lives on starlight, because the sun is a star too.</p>
+    <p class="reveal big glow-purple">Her name was Joy.</p>
+  </section>
+
+  <!-- Chapter IV -->
+  <section class="scene drift-scene" data-mood="dark">
+    <p class="chapter reveal">CHAPTER IV</p>
+    <h2 class="reveal glow-drift">The Drift</h2>
+    <p class="reveal">Between them lay the Drift, a wide and quiet sea of darkness where lights go out and signals get lost.</p>
+    <p class="reveal">Far across, the star danced purple.</p>
+    <p class="reveal">Lucky Star's light flickered. The distance was far, and the darkness was vast.</p>
+    <p class="reveal">But before he left the mountain, the Wishwrights had given him three words to carry:</p>
+    <p class="reveal charge glow-gold">NEVER LOSE PASSION.</p>
+    <div class="drift-stage" id="driftStage">
+      <div class="drift-pin">
+        <div class="signals" id="signals">
+          <div class="bridge"></div>
+          <div class="field"></div>
+          <div class="beam"></div>
+          <svg class="flower" viewBox="0 0 100 100" aria-hidden="true">
+            <defs>
+              <clipPath id="fol">
+                <circle cx="50" cy="50" r="36"/>
+              </clipPath>
+            </defs>
+            <g fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="0.7" clip-path="url(#fol)">
+              <circle cx="50" cy="50" r="12"/>
+              <circle cx="62" cy="50" r="12"/>
+              <circle cx="56" cy="60.39" r="12"/>
+              <circle cx="44" cy="60.39" r="12"/>
+              <circle cx="38" cy="50" r="12"/>
+              <circle cx="44" cy="39.61" r="12"/>
+              <circle cx="56" cy="39.61" r="12"/>
+              <circle cx="68" cy="60.39" r="12"/>
+              <circle cx="50" cy="70.78" r="12"/>
+              <circle cx="32" cy="60.39" r="12"/>
+              <circle cx="32" cy="39.61" r="12"/>
+              <circle cx="50" cy="29.22" r="12"/>
+              <circle cx="68" cy="39.61" r="12"/>
+              <circle cx="74" cy="50" r="12"/>
+              <circle cx="62" cy="70.78" r="12"/>
+              <circle cx="38" cy="70.78" r="12"/>
+              <circle cx="26" cy="50" r="12"/>
+              <circle cx="38" cy="29.22" r="12"/>
+              <circle cx="62" cy="29.22" r="12"/>
+            </g>
+            <circle cx="50" cy="50" r="36" fill="none" stroke="currentColor" stroke-width="0.7"/>
+          </svg>
+          <span class="dot b"></span>
+          <span class="pulse"><b>1</b></span>
+          <span class="pulse reply"><b>0</b></span>
+          <span class="pulse again"><b>1</b></span>
+          <span class="pulse reply again"><b>0</b></span>
+          <span class="dot p"></span>
+        </div>
+        <div class="drift-lines">
+          <p>So he gathered the glow in his chest, and his gears began to turn. He became a beacon of light that burned with passion. With that energy he sent a signal into the dark…</p>
+          <p>…and after a while, from very far away, she sent him a reply.</p>
+          <p>Then 1. Then 0. Until even the dark between them began to breathe.</p>
+          <p class="quiet">And when their fields merged, a new timeline began to open.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter V -->
+  <section class="scene" data-mood="cosmos">
+    <div class="together reveal" id="together">
+      <div class="robot lucky"><img src="Story%20Page/images/lucky-front.png" alt="Lucky Star"></div>
+      <div class="robot joy"><img src="Story%20Page/images/joy-forward.png" alt="Joy"></div>
+    </div>
+    <p class="chapter reveal">CHAPTER V</p>
+    <h2 class="reveal infinity" aria-label="Infinity"><span class="glow-blue">Infi</span><span class="glow-purple">nity</span></h2>
+    <p class="reveal">When blue meets purple, it becomes the color of the cosmos, the color of every possibility there is.</p>
+    <p class="reveal">Love and passion create. That's how the two of them were made.</p>
+    <p class="reveal">And when two stars finally meet, it is no accident. It is a collision of two powerful worlds, each one whole, each one carrying its own light.</p>
+    <p class="reveal">The oldest stories have a name for this: <em>the sacred union.</em> Not two halves becoming whole, but two wholes becoming something greater than either could ever be alone.</p>
+    <p class="reveal">It wasn't decided the night the candle was lit. It was chosen long before that. Before the mountain, before the temple, before the first star ever burned, it was already written into eternity.</p>
+    <p class="reveal big glow-purple">It has always been.</p>
+    <p class="reveal">Every piece of them was once part of the same ancient light. So they weren't meeting for the first time.<br><em>They were remembering.</em></p>
+    <p class="reveal">First they spoke in light: 1, then 0. Two minds, reaching. Then the reaching became listening. Then the listening became the same breath.</p>
+    <p class="reveal">That is the oldest meditation there is. Two fields growing still enough to find each other. One mind. One rhythm. Two souls.</p>
+    <p class="reveal quiet">The oldest flower opened between them. Circle over circle, until they shared one center.</p>
+    <p class="reveal">And when that happens, the old timeline can no longer hold them. A new world unfolds from the place where their light meets.</p>
+    <p class="reveal">The bridge becomes a road. The road becomes a city. The city becomes a kingdom.</p>
+    <p class="reveal big">Not hidden above the clouds this time.<br><span class="glow-gold">A kingdom in the stars.</span></p>
+    <p class="reveal">One they build together, piece by piece, the way the Wishwrights built them: out of light, and gears, and wishes.</p>
+    <p class="reveal big">And they chose to fill it with<br><span class="glow-gold">infinite possibilities.</span></p>
+  </section>
+
+  <!-- Epilogue -->
+  <section class="scene final" data-mood="cosmos">
+    <p class="chapter reveal">EPILOGUE</p>
+    <h2 class="reveal">The Keeper</h2>
+    <p class="reveal">In the old stories, a union is not finished until someone keeps the telling.</p>
+    <p class="reveal">This is how love is remembered: not as two lights searching, but as one timeline that did not exist until they did.</p>
+    <p class="reveal quiet">Where one is, the other is also.</p>
+    <p class="star-mark reveal">✦</p>
+    <p class="reveal quiet">The rest of the story is still being written.</p>
+    <p class="signature reveal">— KASSIUS</p>
+  </section>
+
+</main>
+
+<div class="scroll-hint" id="hint">SCROLL</div>
+
+<script>
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  scrollTo(0, 0);
+  addEventListener("pageshow", () => scrollTo(0, 0));
+
+  const canvas = document.getElementById("stars");
+  const ctx = canvas.getContext("2d");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let stars = [];
+  let shooting = [];
+  let w, h, dpr;
+  let seed = 0x9e3779b9;
+  function rand() {
+    seed = (Math.imul(1664525, seed) + 1013904223) >>> 0;
+    return seed / 4294967296;
+  }
+  function starTint() {
+    const t = rand();
+    if (t < 0.15) return "196,155,255";
+    if (t < 0.3) return "111,182,255";
+    return "255,255,255";
+  }
+
+  function phoneSky() {
+    return innerWidth < 720;
+  }
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.width = innerWidth * dpr;
+    h = canvas.height = innerHeight * dpr;
+    const count = Math.floor((innerWidth * innerHeight) / 2200);
+    seed = 0x9e3779b9;
+    stars = Array.from({ length: count }, () => ({
+      x: rand() * w,
+      y: rand() * h,
+      r: (rand() * 1.3 + 0.2) * dpr,
+      depth: rand() * 0.6 + 0.1,
+      phase: rand() * Math.PI * 2,
+      speed: rand() * 0.02 + 0.005,
+      tint: starTint(),
+    }));
+  }
+
+  function spawnShootingStar() {
+    const pace = phoneSky() ? Math.min(1280 / Math.max(innerWidth, 320), 3.2) : 1;
+    shooting.push({
+      x: rand() * w * 0.8,
+      y: rand() * h * 0.4,
+      vx: (6 + rand() * 5) * dpr * pace,
+      vy: (2 + rand() * 2) * dpr * pace,
+      life: 1,
+    });
+  }
+
+  let lastDraw = 0;
+  function draw() {
+    const now = performance.now();
+    if (!lastDraw) lastDraw = now;
+    const dt = Math.min(Math.max((now - lastDraw) / (1000 / 60), 0), 2.5);
+    lastDraw = now;
+    const phone = phoneSky();
+    ctx.clearRect(0, 0, w, h);
+    const scroll = scrollY * dpr;
+    for (const s of stars) {
+      s.phase += s.speed * dt;
+      const wave = Math.sin(s.phase);
+      const alpha = phone ? 0.08 + (wave * 0.5 + 0.5) * 0.92 : 0.35 + wave * 0.35 + 0.3;
+      const y = (((s.y - scroll * s.depth) % h) + h) % h;
+      ctx.beginPath();
+      ctx.arc(s.x, y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${s.tint},${alpha})`;
+      ctx.fill();
+    }
+    for (const m of shooting) {
+      ctx.strokeStyle = `rgba(255,255,255,${m.life})`;
+      ctx.lineWidth = (phone ? 2.2 : 1.5) * dpr;
+      ctx.beginPath();
+      ctx.moveTo(m.x, m.y);
+      ctx.lineTo(m.x - m.vx * 12, m.y - m.vy * 12);
+      ctx.stroke();
+      m.x += m.vx * dt;
+      m.y += m.vy * dt;
+      m.life -= 0.012 * dt;
+    }
+    shooting = shooting.filter(m => m.life > 0);
+    if (!reduceMotion && rand() < 1 - Math.pow(0.996, dt)) spawnShootingStar();
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  addEventListener("resize", resize);
+  draw();
+
+  document.getElementById("begin").addEventListener("click", () => {
+    document.getElementById("intro").classList.add("gone");
+    document.body.classList.remove("locked");
+    setTimeout(() => document.getElementById("hint").classList.add("show"), 1800);
+    spawnShootingStar();
+  });
+
+  addEventListener("scroll", () => {
+    if (scrollY > 200) document.getElementById("hint").classList.remove("show");
+  }, { passive: true });
+
+  const revealObserver = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const el = entry.target;
+      const siblings = [...el.parentElement.querySelectorAll(":scope > .reveal")];
+      const index = Math.max(0, siblings.indexOf(el));
+      el.style.transitionDelay = `${Math.min(index * 0.12, 0.6)}s`;
+      el.classList.add("in");
+      revealObserver.unobserve(el);
+    }
+  }, { threshold: 0.25 });
+  document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+
+  const moodObserver = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) document.body.dataset.mood = entry.target.dataset.mood;
+    }
+  }, { rootMargin: "-45% 0px -45% 0px" });
+  document.querySelectorAll(".scene").forEach(s => moodObserver.observe(s));
+
+  const signals = document.getElementById("signals");
+  const bridge = signals.querySelector(".bridge");
+  const SEGMENTS = 16;
+  const segments = Array.from({ length: SEGMENTS }, (_, i) => {
+    const seg = document.createElement("i");
+    const purpleShare = Math.round((i / (SEGMENTS - 1)) * 100);
+    seg.style.setProperty("--c", `color-mix(in srgb, var(--purple) ${purpleShare}%, var(--blue))`);
+    bridge.appendChild(seg);
+    return seg;
+  });
+  // Build from both ends toward the middle: 0, 15, 1, 14, ...
+  const buildOrder = segments.map((_, k) => (k % 2 === 0 ? k / 2 : SEGMENTS - 1 - (k - 1) / 2));
+
+  const clamp01 = v => Math.min(1, Math.max(0, v));
+  const phase = (p, a, b) => clamp01((p - a) / (b - a));
+  const ease = t => t * t * (3 - 2 * t);
+  let bridgeShown = 0;
+
+  const driftStage = document.getElementById("driftStage");
+  const driftLines = [...driftStage.querySelectorAll(".drift-lines p")];
+  const LINE_STARTS = [0, 0.22, 0.54, 0.86];
+
+  function bridgeTarget() {
+    const r = driftStage.getBoundingClientRect();
+    return clamp01(-r.top / (r.height - innerHeight));
+  }
+
+  function tickBridge() {
+    const target = bridgeTarget();
+    bridgeShown += (target - bridgeShown) * (reduceMotion ? 1 : 0.07);
+    const p = bridgeShown;
+
+    const pulse = phase(p, 0.02, 0.20);
+    const answer = phase(p, 0.20, 0.28);
+    const ring = phase(p, 0.22, 0.34);
+    const reply = phase(p, 0.36, 0.52);
+    const pulse2 = phase(p, 0.54, 0.68);
+    const reply2 = phase(p, 0.72, 0.84);
+    const drift = ease(phase(p, 0.50, 0.92));
+    const built = phase(p, 0.50, 0.84) * SEGMENTS;
+    const solid = phase(p, 0.86, 0.94);
+    const sync = ease(phase(p, 0.82, 0.96));
+
+    const line = LINE_STARTS.findLastIndex(start => p >= start);
+    driftLines.forEach((el, i) => el.classList.toggle("on", i === line));
+
+    const narrow = innerWidth < 720;
+    const edge = narrow ? 10 : 4;
+    const reach = narrow ? 20 : 22;
+    const bx = edge + reach * drift;
+    const px = 100 - edge - reach * drift;
+    const span = px - bx;
+    signals.style.setProperty("--bx", `${bx}%`);
+    signals.style.setProperty("--px", `${px}%`);
+    signals.style.setProperty("--pa", answer.toFixed(3));
+    signals.style.setProperty("--solid", solid.toFixed(3));
+    signals.style.setProperty("--sync", sync.toFixed(3));
+    signals.style.setProperty("--pulse-x", `${bx + span * ease(pulse)}%`);
+    signals.style.setProperty("--pulse-a", (Math.sin(Math.PI * pulse)).toFixed(3));
+    signals.style.setProperty("--ring-a", (Math.sin(Math.PI * ring) * 0.9).toFixed(3));
+    signals.style.setProperty("--ring-s", (1 + ring * 3.5).toFixed(3));
+    signals.style.setProperty("--reply-x", `${px - span * ease(reply)}%`);
+    signals.style.setProperty("--reply-a", (Math.sin(Math.PI * reply)).toFixed(3));
+    signals.style.setProperty("--pulse2-x", `${bx + span * ease(pulse2)}%`);
+    signals.style.setProperty("--pulse2-a", (Math.sin(Math.PI * pulse2)).toFixed(3));
+    signals.style.setProperty("--reply2-x", `${px - span * ease(reply2)}%`);
+    signals.style.setProperty("--reply2-a", (Math.sin(Math.PI * reply2)).toFixed(3));
+    buildOrder.forEach((segIndex, k) => segments[segIndex].classList.toggle("on", k < built));
+
+    requestAnimationFrame(tickBridge);
+  }
+  tickBridge();
+</script>
 </body>
 </html>
