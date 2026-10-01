@@ -1039,11 +1039,15 @@
     });
   }
 
-  function draw() {
+  let lastDraw = 0;
+  function draw(now) {
+    if (!lastDraw) lastDraw = now;
+    const dt = Math.min((now - lastDraw) / (1000 / 60), 2.5);
+    lastDraw = now;
     ctx.clearRect(0, 0, w, h);
     const scroll = scrollY * dpr;
     for (const s of stars) {
-      s.phase += s.speed;
+      s.phase += s.speed * dt;
       const alpha = 0.35 + Math.sin(s.phase) * 0.35 + 0.3;
       const y = (((s.y - scroll * s.depth) % h) + h) % h;
       ctx.beginPath();
@@ -1058,12 +1062,12 @@
       ctx.moveTo(m.x, m.y);
       ctx.lineTo(m.x - m.vx * 12, m.y - m.vy * 12);
       ctx.stroke();
-      m.x += m.vx;
-      m.y += m.vy;
-      m.life -= 0.012;
+      m.x += m.vx * dt;
+      m.y += m.vy * dt;
+      m.life -= 0.012 * dt;
     }
     shooting = shooting.filter(m => m.life > 0);
-    if (!reduceMotion && rand() < 0.004) spawnShootingStar();
+    if (!reduceMotion && rand() < 1 - Math.pow(0.996, dt)) spawnShootingStar();
     requestAnimationFrame(draw);
   }
 
