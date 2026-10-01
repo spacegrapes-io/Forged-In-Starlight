@@ -1012,6 +1012,10 @@
     return "255,255,255";
   }
 
+  function phoneSky() {
+    return innerWidth < 720;
+  }
+
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     w = canvas.width = innerWidth * dpr;
@@ -1030,25 +1034,29 @@
   }
 
   function spawnShootingStar() {
+    const pace = phoneSky() ? Math.min(1280 / Math.max(innerWidth, 320), 3.2) : 1;
     shooting.push({
       x: rand() * w * 0.8,
       y: rand() * h * 0.4,
-      vx: (6 + rand() * 5) * dpr,
-      vy: (2 + rand() * 2) * dpr,
+      vx: (6 + rand() * 5) * dpr * pace,
+      vy: (2 + rand() * 2) * dpr * pace,
       life: 1,
     });
   }
 
   let lastDraw = 0;
-  function draw(now) {
+  function draw() {
+    const now = performance.now();
     if (!lastDraw) lastDraw = now;
-    const dt = Math.min((now - lastDraw) / (1000 / 60), 2.5);
+    const dt = Math.min(Math.max((now - lastDraw) / (1000 / 60), 0), 2.5);
     lastDraw = now;
+    const phone = phoneSky();
     ctx.clearRect(0, 0, w, h);
     const scroll = scrollY * dpr;
     for (const s of stars) {
       s.phase += s.speed * dt;
-      const alpha = 0.35 + Math.sin(s.phase) * 0.35 + 0.3;
+      const wave = Math.sin(s.phase);
+      const alpha = 0.35 + wave * 0.35 + 0.3;
       const y = (((s.y - scroll * s.depth) % h) + h) % h;
       ctx.beginPath();
       ctx.arc(s.x, y, s.r, 0, Math.PI * 2);
@@ -1057,7 +1065,7 @@
     }
     for (const m of shooting) {
       ctx.strokeStyle = `rgba(255,255,255,${m.life})`;
-      ctx.lineWidth = 1.5 * dpr;
+      ctx.lineWidth = (phone ? 2.2 : 1.5) * dpr;
       ctx.beginPath();
       ctx.moveTo(m.x, m.y);
       ctx.lineTo(m.x - m.vx * 12, m.y - m.vy * 12);
